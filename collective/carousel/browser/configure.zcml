@@ -79,6 +79,17 @@
       layer="collective.carousel.interfaces.ICollectiveCarouselLayer"
       />
 
+  <configure zcml:condition="installed plone.app.contenttypes">
+     <browser:page
+        name="carousel-view"
+        for="plone.app.contenttypes.behaviors.leadimage.ILeadImage"
+        class=".leadimage_behavior_tile.LeadImageTile"
+        permission="zope2.View"
+        layer="collective.carousel.interfaces.ICollectiveCarouselLayer"
+     />
+
+  </configure>
+
 
   <!-- Special tiles for when contentleadimage is installed -->
   <configure zcml:condition="installed collective.contentleadimage">

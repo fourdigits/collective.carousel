@@ -5,11 +5,19 @@ from plone.app.layout.globals.interfaces import IViewView
 from plone.app.layout.viewlets.common import ViewletBase
 from zope.interface import alsoProvides
 
+
 try:
     from plone.app.collection.interfaces import ICollection
 except ImportError:
     from zope.interface import Interface
     class ICollection(Interface):
+        pass
+
+try:
+    from plone.app.contenttypes.interfaces import ICollection as INewCollection
+except ImportError:
+    from zope.interface import Interface
+    class INewCollection(Interface):
         pass
 
 class CarouselViewlet(ViewletBase):
@@ -36,7 +44,7 @@ class CarouselViewlet(ViewletBase):
 
             # It doesn't make sense to show *all* objects from a collection
             # - some of them might return hundreeds of objects
-            if ICollection.providedBy(provider):
+            if ICollection.providedBy(provider) or INewCollection.providedBy(provider):
                 res = provider.results(b_size=7)
                 return res
             return provider.queryCatalog()[:7]
@@ -48,7 +56,7 @@ class CarouselViewlet(ViewletBase):
 
     def editCarouselLink(self, provider):
         if provider is not None:
-            if ICollection.providedBy(provider):
+            if ICollection.providedBy(provider) or INewCollection.providedBy(provider):
                 return provider.absolute_url() + '/edit'
             return provider.absolute_url() + '/criterion_edit_form'
         return None
